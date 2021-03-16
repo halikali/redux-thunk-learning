@@ -1,25 +1,27 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect } from "react";
+import { connect } from "react-redux";
+import { getQuote } from "./store/actions/index";
+import "./styles.css";
 
-function App() {
+const App = ({ getQuoteToThisPage, quotes, author }) => {
+  useEffect(() => {
+    getQuoteToThisPage();
+  }, []);
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>{quotes}</h1>
+      <h2>{author}</h2>
     </div>
   );
-}
+};
 
-export default App;
+const mapStateToProps = (state) => ({
+  quotes: state.quoteReducer.data.quote || "",
+  author: state.quoteReducer.data.author || ""
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  getQuoteToThisPage: () => dispatch(getQuote())
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
